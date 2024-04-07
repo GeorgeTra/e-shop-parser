@@ -1,6 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
-from parse1 import parse_first_page
+from src.parse1 import parse_first_page
 
 
 page_url = 'https://market.kheoos.com/en/b/allbrands?slug=all%20brands'
