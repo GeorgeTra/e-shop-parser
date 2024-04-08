@@ -31,3 +31,5 @@ def parse_brand(brands_list):
 products_list = parse_brand(brands_list1)
 
 # print(products_list)
+
+
