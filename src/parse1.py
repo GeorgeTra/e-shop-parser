@@ -6,7 +6,7 @@ def parse_first_page(url):
     response = requests.get(url)
     soup = BeautifulSoup(response.content, 'html.parser')
 
-    letter_list = [chr(letter) for letter in range(65, 66)]
+    letter_list = [chr(letter) for letter in range(65, 91)]
     letter_list.insert(0, '0-9')
 
     print(letter_list)

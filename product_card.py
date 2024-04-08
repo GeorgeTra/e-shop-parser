@@ -3,9 +3,8 @@ import requests
 from bs4 import BeautifulSoup
 from os import getcwd, makedirs
 from os.path import basename, exists, join
-
-
 from src.parse2 import products_list
+from tqdm import tqdm
 
 
 def parse_product_page(url):
@@ -91,7 +90,7 @@ def parse_product_page(url):
 
 product_features_list = []
 
-for i in products_list:
+for i in tqdm(products_list):
     # print(parse_product_page(i))
     p = (parse_product_page(i))
     product_features_list.append(p)

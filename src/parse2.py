@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 from src.parse1 import parse_first_page
+from tqdm import tqdm
 
 
 page_url = 'https://market.kheoos.com/en/b/allbrands?slug=all%20brands'
@@ -11,7 +12,7 @@ brands_list1 = parse_first_page(page_url)
 def parse_brand(brands_list):
     products_list = []
 
-    for i in brands_list:
+    for i in tqdm(brands_list):
         response = requests.get(i)
 
         soup = BeautifulSoup(response.content, 'html.parser')
@@ -29,4 +30,4 @@ def parse_brand(brands_list):
 
 products_list = parse_brand(brands_list1)
 
-print(products_list)
+# print(products_list)
