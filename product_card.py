@@ -3,10 +3,10 @@ import requests
 from bs4 import BeautifulSoup
 from os import getcwd, makedirs
 from os.path import basename, exists, join
-# from src.parse2 import products_list
+from src.parse2 import products_list
 from tqdm import tqdm
 
-from src.test_vars import lst_full
+from src.test_vars import all_brands_links_list, abcd_brands_links_list
 
 
 def parse_product_page(url):
@@ -48,7 +48,8 @@ def parse_product_page(url):
     product_desc = soup.find('p', class_='desc')
     if product_desc:
         product_desc = product_desc.text.replace('\n                        ', '') \
-            .replace('\n                    ', '')
+            .replace('\n                    ', '').replace('"', '').replace('                            ', '')\
+            .replace('                    ', '')
     else:
         product_desc = '0'
     if product_desc == '\n':
@@ -62,7 +63,7 @@ def parse_product_page(url):
 
     price = soup.find('p', class_='price')
     if price:
-        price = price.text.replace('€\xa0Tax Excl.\n', '').replace('\n', '').replace(' ', '')
+        price = price.text.replace('€\xa0Tax Excl.\n', '').replace('\n', '').replace(' ', '').replace('"', '')
     else:
         price = '0'
 
@@ -104,8 +105,11 @@ def parse_product_page(url):
 product_features_list = []
 # print(len(products_list))
 
-# for i in tqdm(products_list):
-for i in tqdm(lst_full):
+for i in tqdm(products_list):
+# for i in tqdm(all_brands_links_list):
+# for i in tqdm(abcd_brands_links_list):
+# for i in tqdm(fanuc_products):
+# for i in tqdm(['https://market.kheoos.com/en/p/plc-cpus/fanuc-a16b-1010-0190-motherboard/kh011A552_DFR']):
     # print(parse_product_page(i))
     p = (parse_product_page(i))
     product_features_list.append(p)
@@ -128,3 +132,4 @@ def csv_maker(lst):
 csv_maker(product_features_list)
 
 # print(products_list)
+

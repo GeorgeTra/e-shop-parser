@@ -11,6 +11,11 @@ brands_list_f = ['https://market.kheoos.com/en/b/facom', 'https://market.kheoos.
 
 brands_list_facom_fag = ['https://market.kheoos.com/en/b/facom', 'https://market.kheoos.com/en/b/fag']
 brands_list_long = ['https://market.kheoos.com/en/b/fanuc', 'https://market.kheoos.com/en/b/fastenal', 'https://market.kheoos.com/en/b/fath', 'https://market.kheoos.com/en/b/faulhaber', 'https://market.kheoos.com/en/b/ferraz', 'https://market.kheoos.com/en/b/ferraz-shawmut', 'https://market.kheoos.com/en/b/ferroflex', 'https://market.kheoos.com/en/b/ferryproduits', 'https://market.kheoos.com/en/b/festo']
+brands_list_fanuc = ['https://market.kheoos.com/en/b/fanuc']
+brands_list_3com = ['https://market.kheoos.com/en/b/3com']
+brands_list_5 = ['https://market.kheoos.com/en/b/asco-numatics']
+brands_list_9 = ['https://market.kheoos.com/en/b/fitok']
+brands_list_6 = ['https://market.kheoos.com/en/b/rexroth-bosch-group']
 
 
 def parse_brand(brands_list):
@@ -25,11 +30,32 @@ def parse_brand(brands_list):
 
         product_pages_links = [link.get('href') for link in product_pages_hrefs]
 
+        # print(product_pages_links)
+
         product_pages_full_links = []
 
-        for item in product_pages_links:
-            if item is not None:
-                product_pages_full_links.append('https://market.kheoos.com' + item)
+        if len(product_pages_links) > 7:
+            last_page_num = product_pages_links[-2][-2:]
+            if last_page_num[0] == '=':
+                last_page_num = product_pages_links[-2][-1:]
+
+            first_page_link = product_pages_links[0][:-1]
+
+            # print(first_page_link)
+
+            page_num = 1
+            for item in range(int(last_page_num)):
+                product_pages_full_links.append(f'https://market.kheoos.com' + first_page_link + str(page_num))
+                page_num += 1
+
+        elif 1 <= len(product_pages_links) <= 7:
+            product_pages_hrefs = soup.find(class_='ps-pagination').findChildren('a')
+
+            product_pages_links = [link.get('href') for link in product_pages_hrefs]
+
+            for item in product_pages_links:
+                if item is not None:
+                    product_pages_full_links.append('https://market.kheoos.com' + item)
 
         for link in product_pages_full_links:
             response = requests.get(link)
@@ -40,12 +66,17 @@ def parse_brand(brands_list):
 
             products = [link.get('href') for link in goods_links]
 
-            for item in products:
-                if item is not None:
-                    products_list.append('https://market.kheoos.com' + item)
+            for product in products:
+                if product is not None:
+                    # new_product = 'https://market.kheoos.com' + product
+                    # if new_product not in products_list:
+                    products_list.append('https://market.kheoos.com' + product)
 
     return products_list
+    # return product_pages_links
+    # return product_pages_hrefs
     # return product_pages_full_links
+    # return last_page_num
 
 
 products_list = parse_brand(brands_list1)
@@ -53,6 +84,11 @@ products_list = parse_brand(brands_list1)
 # products_list = parse_brand(brands_list_fag)
 # products_list = parse_brand(brands_list_facom_fag)
 # products_list = parse_brand(brands_list_long)
+# products_list = parse_brand(brands_list_fanuc)
+# products_list = parse_brand(brands_list_3com)
+# products_list = parse_brand(brands_list_5)
+# products_list = parse_brand(brands_list_6)
+# products_list = parse_brand(brands_list_9)
 
 print(products_list)
 
